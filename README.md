@@ -13,6 +13,8 @@ Every day, it delivers a neatly formatted Markdown newsletter highlighting:
 ## Demo
 <!-- Please embed a video recording of your workflow in action. If you can't provide a video, screenshots are acceptable. -->
 
+### Sample output
+
 # 🤖 AutoReviewer AI – Daily Digest (June 8, 2025)
 
 For AI researchers and developers – your 2-minute summary of what's new and exciting.
