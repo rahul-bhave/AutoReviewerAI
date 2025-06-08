@@ -1,38 +1,35 @@
-name: Run AutoReviewer AI Daily
+name: Auto Run Runner H Workflow
 
 on:
   schedule:
-    - cron: "0 7 * * *"  # Every day at 07:00 UTC
-  workflow_dispatch:
+    # Runs daily at 8:00 AM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # allows manual trigger from GitHub UI
 
 jobs:
-  run-digest:
+  run-runnerh:
     runs-on: ubuntu-latest
+
+    env:
+      # Runner H authentication (set these secrets in GitHub repo Settings > Secrets)
+      RUNNERH_API_KEY: ${{ secrets.RUNNERH_API_KEY }}
+
+      # Email SMTP credentials for sending newsletter
+      EMAIL_SMTP_USER: ${{ secrets.EMAIL_SMTP_USER }}
+      EMAIL_SMTP_PASS: ${{ secrets.EMAIL_SMTP_PASS }}
+
+      # Slack Webhook URL for posting newsletter to Slack channel
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Convert Markdown to HTML
-        run: node scripts/md-to-html.js
-
-      - name: Send Email (via CLI/SendGrid/etc.)
+      - name: Install Runner H CLI
         run: |
-          echo "Sending email..."
-          # Replace with your send command
-          # e.g., curl/sendmail/sendgrid CLI, etc.
+          # Adjust this installation command as per Runner H documentation
+          curl -fsSL https://runnerh.example.com/install.sh | bash
 
-      - name: Post to Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Run Runner H workflow
         run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data "{\"text\":\"🗞️ Daily AI Digest is ready! Check today's updates.\"}" \
-          $SLACK_WEBHOOK_URL
+          runnerh run --config runnerh.yaml
