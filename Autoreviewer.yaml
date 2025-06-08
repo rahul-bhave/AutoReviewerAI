@@ -1,0 +1,47 @@
+name: AutoReviewer AI - Daily AI Digest Generator
+
+description: >
+  Scans arXiv, GitHub, and Medium for the latest AI/ML/GenAI content (from the last 2 days),
+  classifies and summarizes the findings, and compiles them into a clean Markdown newsletter.
+
+goals:
+  - Discover new research papers (≤2 days old) from arXiv (cs.LG, cs.AI, cs.CL, stat.ML)
+  - Find trending GitHub repos tagged AI/ML
+  - Scrape recent Medium posts on Generative AI / ML
+  - Filter and classify each item
+  - Summarize each item in 2–3 lines
+  - Generate a Markdown-formatted newsletter
+
+tools:
+  - web_browser
+  - text_extraction
+  - content_classifier
+  - summarizer
+  - markdown_formatter
+
+tasks:
+  - id: fetch_sources
+    description: Search arXiv, GitHub Trending (AI/ML), Medium for new content in last 2 days.
+    tool: web_browser
+    input: |
+      Queries like:
+        - arxiv.org search: "Generative AI" after:2025-06-06
+        - GitHub Trending ML/AI
+        - site:medium.com "Generative AI" published in last 2 days
+
+  - id: extract_and_classify
+    description: Extract main text and classify each into: GenAI, ML, NLP, or Tools.
+    tool: text_extraction
+    input: URLs from fetch_sources
+
+  - id: summarize_items
+    description: Summarize each item in 2–3 lines (novelty + relevance). Optional: suggest use case or critique.
+    tool: summarizer
+
+  - id: format_newsletter
+    description: Format into Markdown digest grouped by category.
+    tool: markdown_formatter
+    input: Summarized and tagged content
+
+outputs:
+  - newsletter.md
