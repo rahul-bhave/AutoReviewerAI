@@ -38,3 +38,14 @@ This project is automated to run daily using GitHub Actions (`.github/workflows/
 ```bash
 npm install
 node scripts/md-to-html.js
+
+## ⚙️ Running Locally with .env
+
+- setup .env file as mentioned in the repo.
+- Export environment variable before running it.
+
+```bash
+export $(grep -v '^#' .env | xargs)
+runnerh run --config runnerh.yaml
+
+
