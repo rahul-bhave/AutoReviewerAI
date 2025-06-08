@@ -1,0 +1,38 @@
+name: Run AutoReviewer AI Daily
+
+on:
+  schedule:
+    - cron: "0 7 * * *"  # Every day at 07:00 UTC
+  workflow_dispatch:
+
+jobs:
+  run-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Convert Markdown to HTML
+        run: node scripts/md-to-html.js
+
+      - name: Send Email (via CLI/SendGrid/etc.)
+        run: |
+          echo "Sending email..."
+          # Replace with your send command
+          # e.g., curl/sendmail/sendgrid CLI, etc.
+
+      - name: Post to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"🗞️ Daily AI Digest is ready! Check today's updates.\"}" \
+          $SLACK_WEBHOOK_URL
