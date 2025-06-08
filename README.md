@@ -9,7 +9,7 @@ AutoReviewer AI is an autonomous agent that scans the latest content in AI, ML, 
 - ✍️ Pulls recent Medium articles on GenAI / ML
 - 🗂️ Classifies content into GenAI, ML, NLP, Tools
 - 📝 Summarizes and formats into a Markdown + HTML newsletter
-- 📧 Sends it via email and Slack(WIP)
+- 📧 WIP - Sends it via email and Slack
 
 ## 🧩 Runner H Agent
 
