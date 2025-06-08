@@ -1,0 +1,142 @@
+name: AutoReviewer AI - Daily AI Digest Generator
+
+description: >
+  AutoReviewer AI is an autonomous Runner H agent that scans arXiv, GitHub, and Medium
+  for the latest developments in AI/ML/GenAI from the past 2 days.
+  It generates a categorized, summarized Markdown + HTML newsletter and delivers it daily via email and Slack.
+
+goals:
+  - Search arXiv.org (cs.LG, cs.AI, cs.CL, stat.ML) for new research (≤ 2 days old)
+  - Scrape GitHub Trending for ML/AI-tagged repositories
+  - Search Medium for recent GenAI/ML articles
+  - Classify content into GenAI, ML, NLP, Tools
+  - Summarize each in 2–3 lines with novelty and relevance
+  - Format into Markdown and HTML newsletter
+  - Deliver newsletter daily via email and Slackrunnerh.yaml
+
+tools:
+  - web_browser
+  - text_extraction
+  - content_classifier
+  - summarizer
+  - markdown_formatter
+  - html_converter
+  - email_sender
+  - slack_poster
+  - scheduler
+
+memory:
+  preferences:
+    topics:
+      - Generative AI
+      - Machine Learning
+      - NLP
+      - AI tools
+    categories:
+      - GenAI
+      - ML
+      - NLP
+      - Tools
+
+tasks:
+  - id: fetch_arxiv
+    description: Search arXiv for AI-related papers from the last 2 days
+    tool: web_browser
+    input: >
+      Search query: site:arxiv.org category:cs.LG OR cs.AI OR cs.CL OR stat.ML
+      Filter: last 2 days
+      Keywords: "Generative AI", "NLP", "Machine Learning", "Deep Learning"
+    output_format: |
+      - Title
+      - Authors
+      - URL
+      - Abstract
+      - Publish Date
+
+  - id: fetch_github
+    description: Scrape GitHub Trending for AI/ML tools (last 2 days)
+    tool: web_browser
+    input: >
+      Visit https://github.com/trending?since=daily
+      Filter repositories tagged with: ai, machine-learning, nlp, genai
+    output_format: |
+      - Repo Name
+      - Description
+      - Stars
+      - URL
+      - Tags
+
+  - id: fetch_medium
+    description: Search Medium for recent articles on GenAI and ML
+    tool: web_browser
+    input: >
+      Query: "Generative AI" OR "machine learning" site:medium.com
+      Filter: Articles posted within last 2 days
+    output_format: |
+      - Title
+      - Author
+      - URL
+      - Summary
+      - Tags
+
+  - id: extract_and_classify
+    description: Extract content and assign categories
+    tool: text_extraction
+    input: Links from fetch_arxiv, fetch_github, fetch_medium
+    output_format: |
+      - Source (arXiv/GitHub/Medium)
+      - Title
+      - URL
+      - Category: GenAI, ML, NLP, Tools
+      - Summary (2–3 lines with novelty + relevance)
+      - Optional: Suggested use case or critique
+
+  - id: summarize_and_format
+    description: Create Markdown newsletter from structured content
+    tool: markdown_formatter
+    input: Use summaries from extract_and_classify
+    output_format: >
+      A structured Markdown digest with sections:
+        ## 🧠 GenAI
+        ## 📊 Machine Learning
+        ## 🗣 NLP
+        ## 🛠 Tools
+        Include title, link, and summary for each item.
+
+  - id: convert_to_html
+    description: Convert Markdown to styled HTML
+    tool: html_converter
+    input: ai_digest.md
+    output_format: ai_digest.html
+
+  - id: send_email
+    description: Email the digest
+    tool: email_sender
+    input: |
+      To: newsletter@yourdomain.com
+      Subject: 🧠 AutoReviewer AI Digest - [Date]
+      Body: Inline HTML from ai_digest.html
+
+  - id: post_to_slack
+    description: Post digest to Slack
+    tool: slack_poster
+    input: |
+      Channel: #ai-digest
+      Message: |
+        🗞️ *Today’s AI Digest is ready!*
+        Browse the latest in GenAI, ML, NLP & Tools.
+        🔗 Summary attached below.
+      Attach: ai_digest.md
+
+  - id: schedule_daily
+    description: Schedule this entire workflow to run every day
+    tool: scheduler
+    input: |
+      Time: 07:00 UTC
+      Frequency: Daily
+
+outputs:
+  - ai_digest.md
+  - ai_digest.html
+  - delivery_log_email.txt
+  - delivery_log_slack.txt
