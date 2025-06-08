@@ -26,6 +26,7 @@ This project is automated to run daily using GitHub Actions (`.github/workflows/
 ## 🛠 Requirements
 
 - Node.js (for Markdown ➝ HTML conversion)
+- Runner H login credentials to run this Manually.
 - GitHub Secrets for:
   - `EMAIL_SMTP_USER`
   - `EMAIL_SMTP_PASS`
