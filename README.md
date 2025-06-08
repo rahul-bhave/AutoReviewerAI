@@ -31,6 +31,7 @@ This project is automated to run daily using GitHub Actions (`.github/workflows/
   - `EMAIL_SMTP_USER`
   - `EMAIL_SMTP_PASS`
   - `SLACK_WEBHOOK_URL`
+  - `RUNNERH_API_KEY`
 
 ## 📦 Install & Run
 
